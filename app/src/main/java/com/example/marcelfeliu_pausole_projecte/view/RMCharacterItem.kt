@@ -7,32 +7,36 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.marcelfeliu_pausole_projecte.model.RMCharacter
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.example.marcelfeliu_pausole_projecte.model.Character
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun RMCharacterItem(character: RMCharacter, onSelectedItem: ()-> Unit) {
+fun RMCharacterItem(character: Character, onSelectedItem: ()-> Unit) {
     Card(modifier = Modifier
-            .fillMaxWidth()
-            // Afegir propietat clickable i li definim el comportament
-            .clickable { onSelectedItem() }
+        .fillMaxWidth()
+        // Afegir propietat clickable i li definim el comportament
+        .clickable { onSelectedItem() }
     ) {
         Row {
-            Image(
-                painter = painterResource(id = character.image),
+            GlideImage(
+                model = character.image,
                 contentDescription = character.name,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .padding(10.dp)
                     .fillMaxHeight()
+                    .size(80.dp)
             )
             Column {
                 Text(

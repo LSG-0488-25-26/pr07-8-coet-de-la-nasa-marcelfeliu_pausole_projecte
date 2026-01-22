@@ -1,31 +1,46 @@
 package com.example.marcelfeliu_pausole_projecte.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.marcelfeliu_pausole_projecte.R
-import com.example.marcelfeliu_pausole_projecte.model.RMCharacter
+import com.example.marcelfeliu_pausole_projecte.model.Character
+import com.example.marcelfeliu_pausole_projecte.model.Data
+import com.example.retrofitapp.api.Repository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class RickAndMortyViewModel : ViewModel() {
 
-    private val _characters = MutableLiveData(mutableListOf(
-        RMCharacter("Rick Sanchez", "Alive", "Human", "Male", R.drawable.rick),
-        RMCharacter("Morty Smith", "Alive", "Human", "Male", R.drawable.morty),
-        RMCharacter("Summer Smith", "Alive", "Human", "Female", R.drawable.summer),
-        RMCharacter("Beth Smith", "Alive", "Human", "Female", R.drawable.beth),
-        RMCharacter("Jerry Smith", "Alive", "Human", "Male", R.drawable.jerry),
-        RMCharacter("Abadango Cluster Princess", "Alive", "Alien", "Female", R.drawable.abadango),
-        RMCharacter("Abradolf Lincler", "unknown", "Human", "Male", R.drawable.abradolf),
-        RMCharacter("Adjudicator Rick", "Dead", "Human", "Male", R.drawable.adjudicator_rick),
-    ))
+    private val repository = Repository()
+    private val _loading = MutableLiveData(true)
+    val loading = _loading
+    private val _charactersData = MutableLiveData<Data>()
+    val charactersData = _charactersData
 
-    val characters: LiveData<MutableList<RMCharacter>> = _characters
+    fun getCharacters() {
 
-    private val _currentCharacter = MutableLiveData(RMCharacter("", "", "", "", R.drawable.rick))
-    var currentCharacter: LiveData<RMCharacter> = _currentCharacter
+        CoroutineScope(Dispatchers.IO).launch {
 
-    fun setCurrentCharacter(character: RMCharacter){
+            val response = repository.getAllCharacters()
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+                    _charactersData.value = response.body()
+                    _loading.value = false
+                } else {
+                    Log.e("Error :", response.message())
+                }
+            }
+        }
+    }
+    private val _currentCharacter = MutableLiveData<Character>()
+    var currentCharacter= _currentCharacter
+
+    fun setCurrentCharacter(character: Character){
         _currentCharacter.value = character
     }
 }

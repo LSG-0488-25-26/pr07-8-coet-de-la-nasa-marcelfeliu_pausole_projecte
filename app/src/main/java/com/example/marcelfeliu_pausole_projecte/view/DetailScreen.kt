@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +22,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.marcelfeliu_pausole_projecte.viewmodel.RickAndMortyViewModel
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
@@ -28,6 +31,14 @@ import com.bumptech.glide.integration.compose.GlideImage
 @Composable
 fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel, modifier: Modifier = Modifier) {
     val character by viewModel.currentCharacter.observeAsState()
+
+    val isCaptured by viewModel.isCaptured.observeAsState(false)
+
+    LaunchedEffect(character) {
+        character?.let {
+            viewModel.isCaptured(it)
+        }
+    }
 
     Box(
         modifier = modifier
@@ -39,13 +50,41 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Button(
+                onClick = {
+                    if (isCaptured){
+                        viewModel.freeCharacter(character!!) {
+                            viewModel.toggleIsCapturingCharacter()
+                        }
+                    } else {
+                        viewModel.captureCharacter(character!!) {
+                            viewModel.toggleIsCapturingCharacter()
+                        }
+                    }
+                }
+            ) {
+                if (isCaptured){
+                    Text("Free")
+                } else {
+                    Text("Capture")
+                }
+            }
             if (character != null) {
                 GlideImage(
                     model = character!!.image,
                     contentDescription = character!!.name,
+                    colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply
+                    {
+                        if (isCaptured) {
+                            setToSaturation(0f)
+                        } else {
+                            setToSaturation(1f)
+                        }
+                    }),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(380.dp)
+
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))

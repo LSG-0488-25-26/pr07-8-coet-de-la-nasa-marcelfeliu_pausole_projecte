@@ -25,3 +25,11 @@ data class Origin(
     val name: String,
     val url: String
 )
+
+fun Character.toDBCharacter(isCaptured: Boolean = false): DBCharacter {
+    return DBCharacter(
+        id = this.id,
+        name = this.name,
+        isCaptured = isCaptured
+    )
+}

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
 }
 
 android {
@@ -48,6 +49,9 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+    implementation("androidx.room:room-runtime:2.6.1" )
+    implementation("androidx.room:room-ktx:2.6.1" )
+    kapt("androidx.room:room-compiler:2.6.1" )
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

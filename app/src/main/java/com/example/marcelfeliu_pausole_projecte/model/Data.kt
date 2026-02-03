@@ -2,7 +2,7 @@ package com.example.marcelfeliu_pausole_projecte.model
 
 data class Data(
     val info: Info,
-    val results: List<Character>
+    var results: List<Character>
 )
 
 data class Info(

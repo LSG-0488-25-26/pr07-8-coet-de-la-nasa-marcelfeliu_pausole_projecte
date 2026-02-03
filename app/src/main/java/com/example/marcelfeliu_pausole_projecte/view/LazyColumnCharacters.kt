@@ -13,6 +13,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -30,7 +31,9 @@ fun LazyColumnCharacters(navController: NavController, viewModel: RickAndMortyVi
     val showLoading: Boolean by viewModel.loading.observeAsState(true)
     val characterList by viewModel.charactersData.observeAsState(Data(Info(0,"", 0, ""), emptyList()))
 
-    viewModel.getCharacters()
+    LaunchedEffect(Unit) {
+        viewModel.getCharacters()
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

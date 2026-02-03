@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.marcelfeliu_pausole_projecte.R
+import com.example.marcelfeliu_pausole_projecte.model.BottomNavigationScreens
 import com.example.marcelfeliu_pausole_projecte.model.Character
 import com.example.marcelfeliu_pausole_projecte.model.DBCharacter
 import com.example.marcelfeliu_pausole_projecte.model.Data
@@ -17,6 +18,10 @@ import kotlinx.coroutines.withContext
 
 
 class RickAndMortyViewModel : ViewModel() {
+
+    // Characters
+    private val _currentCharacter = MutableLiveData<Character>()
+    var currentCharacter= _currentCharacter
 
     //API
     private val repository = Repository()
@@ -40,7 +45,17 @@ class RickAndMortyViewModel : ViewModel() {
     private val _isCapturingCharacter = MutableLiveData<Boolean>(false)
     val isCapturingCharacter: MutableLiveData<Boolean> = _isCapturingCharacter
 
+    //Navigations
+    private val _bottomNavigationItems = MutableLiveData<List<BottomNavigationScreens>>(
+        listOf(
+            BottomNavigationScreens.Home,
+            BottomNavigationScreens.Captured
+        ))
+
+    public val bottomNavigationItems: LiveData<List<BottomNavigationScreens>> = _bottomNavigationItems
+
     fun getCharacters() {
+        Log.d("jsdhfj", "Hola")
 
         CoroutineScope(Dispatchers.IO).launch {
 
@@ -55,8 +70,7 @@ class RickAndMortyViewModel : ViewModel() {
             }
         }
     }
-    private val _currentCharacter = MutableLiveData<Character>()
-    var currentCharacter= _currentCharacter
+
 
     fun setCurrentCharacter(character: Character){
         _currentCharacter.value = character
@@ -105,5 +119,27 @@ class RickAndMortyViewModel : ViewModel() {
 
     fun toggleIsCapturingCharacter(){
         this._isCapturingCharacter.value = this._isCapturingCharacter.value!!.not()
+    }
+
+    fun getCapturedCharacters() {
+        _loading.value = true
+
+        CoroutineScope(Dispatchers.IO).launch {
+
+            val response = repository.getAllCharacters()
+            val capturedFromDb = dbRepository.getCaptured()
+
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful && response.body() != null) {
+                    val allApiChars = response.body()!!.results
+                    val capturedNames = capturedFromDb.map { it.name }.toSet()
+
+                    val filteredList = allApiChars.filter { it.name in capturedNames }
+
+                    _charactersData.value.results = filteredList
+                }
+                _loading.value = false
+            }
+        }
     }
 }

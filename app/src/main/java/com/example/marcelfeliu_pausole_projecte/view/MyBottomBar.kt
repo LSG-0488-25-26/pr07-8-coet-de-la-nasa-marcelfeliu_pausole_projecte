@@ -1,0 +1,52 @@
+package com.example.android_studio_scaffold.view
+
+import android.util.Log
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.marcelfeliu_pausole_projecte.nav.Routes
+import com.example.marcelfeliu_pausole_projecte.viewmodel.RickAndMortyViewModel
+
+@Composable
+fun MyBottomBar(
+    myViewModel: RickAndMortyViewModel,
+    navigationController: NavHostController
+) {
+    val bottomNavigationItems by myViewModel.bottomNavigationItems.observeAsState(emptyList())
+
+    NavigationBar(containerColor = Color.LightGray, contentColor = Color.Black) {
+        val navBackEntry by navigationController.currentBackStackEntryAsState()
+        val currentRoute = navBackEntry?.destination?.route
+        val capturedCharacters by myViewModel.captured.observeAsState()
+
+        Routes.CharactersList.route
+
+        bottomNavigationItems.forEach { item ->
+            NavigationBarItem(
+                icon = { Icon(item.icon, contentDescription = item.label) },
+                label = { Text(item.label) },
+                selected = currentRoute == item.route,
+                onClick = {
+//                    if (currentRoute != item.route) {
+//                        navigationController.navigate(item.route)
+//                    }
+                    when (item.route)
+                    {
+                        Routes.CharactersList.route -> { myViewModel.getCharacters() }
+                        Routes.CapturedList.route -> { myViewModel.getCapturedCharacters() }
+                    }
+                    myViewModel.getCaptured()
+                    Log.d("SKDJ", capturedCharacters?.count().toString())
+                }
+            )
+        }
+    }
+}

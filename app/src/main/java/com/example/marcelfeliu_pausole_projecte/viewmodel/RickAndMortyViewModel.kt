@@ -131,14 +131,12 @@ class RickAndMortyViewModel : ViewModel() {
     }
 
     fun getCapturedCharacters() {
-        Log.d("kdsfsk", "Entering getCapturedCharacters")
         _loading.value = true
 
         CoroutineScope(Dispatchers.IO).launch {
             val capturedFromDb = dbRepository.getCaptured()
             withContext(Dispatchers.Main) {
                 if (listOfChatacters.isNotEmpty()) {
-                    Log.d("Edmsd", "entering coroutione of captured")
                     val allApiChars = listOfChatacters
                     val capturedNames = capturedFromDb.map { it.name }.toSet()
 

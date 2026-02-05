@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -70,25 +71,6 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Button(
-                    onClick = {
-                        if (isCaptured){
-                            viewModel.freeCharacter(character!!) {
-                                viewModel.toggleIsCapturingCharacter()
-                            }
-                        } else {
-                            viewModel.captureCharacter(character!!) {
-                                viewModel.toggleIsCapturingCharacter()
-                            }
-                        }
-                    }
-                ) {
-                    if (isCaptured){
-                        Text("Free")
-                    } else {
-                        Text("Capture")
-                    }
-                }
                 if (character != null) {
                     GlideImage(
                         model = character!!.image,
@@ -154,7 +136,7 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
                     )
 
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(5.dp))
                 } else {
                     Text(
                         text = "Unknown Character",
@@ -164,14 +146,36 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
                     )
                 }
 
-                Button(
-                    onClick =
-                        {
-                            navController.popBackStack()
-                        },
-                    modifier = Modifier.padding(top = 20.dp)
-                ) {
-                    Text("Go Back")
+                Row()
+                {
+                    Button(
+                        onClick = {
+                            if (isCaptured){
+                                viewModel.freeCharacter(character!!) {
+                                    viewModel.toggleIsCapturingCharacter()
+                                }
+                            } else {
+                                viewModel.captureCharacter(character!!) {
+                                    viewModel.toggleIsCapturingCharacter()
+                                }
+                            }
+                        }
+                    ) {
+                        if (isCaptured){
+                            Text("Free")
+                        } else {
+                            Text("Capture")
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Button(
+                        onClick =
+                            {
+                                navController.popBackStack()
+                            }
+                    ) {
+                        Text("Go Back")
+                    }
                 }
             }
         } else {
@@ -187,27 +191,8 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
                     modifier = modifier
                     .fillMaxWidth(0.5f)
                         .fillMaxHeight()
-                        .background(Color.Blue))
+                )
                 {
-                    Button(
-                        onClick = {
-                            if (isCaptured) {
-                                viewModel.freeCharacter(character!!) {
-                                    viewModel.toggleIsCapturingCharacter()
-                                }
-                            } else {
-                                viewModel.captureCharacter(character!!) {
-                                    viewModel.toggleIsCapturingCharacter()
-                                }
-                            }
-                        }
-                    ) {
-                        if (isCaptured) {
-                            Text("Free")
-                        } else {
-                            Text("Capture")
-                        }
-                    }
                     if (character != null) {
                         GlideImage(
                             model = character!!.image,
@@ -223,7 +208,7 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
                                 }),
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
-                                .size(160.dp)
+                                .size(180.dp)
 
                         )
 
@@ -236,7 +221,6 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
                     modifier = modifier
                         .fillMaxWidth(1f)
                         .fillMaxHeight()
-                        .background(Color.Red)
                 ) {
                     if (character != null) {
 
@@ -248,31 +232,53 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        Text(
-                            text = "Specie: ${
-                                character!!.species.lowercase().replaceFirstChar { it.uppercase() }
-                            }",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Medium,
-                        )
+                        Row() {
+                            Column(modifier = Modifier.fillMaxSize(0.5f)) {
+                                Text(
+                                    text = "Specie: ${
+                                        character!!.species.lowercase().replaceFirstChar { it.uppercase() }
+                                    }",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Medium,
+                                )
 
-                        Text(
-                            text = "Status: ${
-                                character!!.status.lowercase().replaceFirstChar { it.uppercase() }
-                            }",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Medium,
-                        )
+                                Text(
+                                    text = "Status: ${
+                                        character!!.status.lowercase().replaceFirstChar { it.uppercase() }
+                                    }",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Medium,
+                                )
 
-                        Text(
-                            text = "Gender: ${
-                                character!!.gender.lowercase().replaceFirstChar { it.uppercase() }
-                            }",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Medium,
-                        )
+                                Text(
+                                    text = "Gender: ${
+                                        character!!.gender.lowercase().replaceFirstChar { it.uppercase() }
+                                    }",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Medium,
+                                )
+                            }
+                            Column (modifier = Modifier.fillMaxSize(1f)) {
+                                Text(
+                                    text = "Location: ${character!!.location.name.lowercase().replaceFirstChar { it.uppercase() }}",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Medium,
+                                )
 
-                        Spacer(modifier = Modifier.height(24.dp))
+                                Text(
+                                    text = "Origin: ${character!!.origin.name.lowercase().replaceFirstChar { it.uppercase() }}",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Medium,
+                                )
+
+                                Text(
+                                    text = "N of episodes: ${character!!.episode.count()}",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Medium,
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(5.dp))
                     } else {
                         Text(
                             text = "Unknown Character",
@@ -281,16 +287,38 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
                             fontWeight = FontWeight.Bold
                         )
                     }
-
-                    Button(
-                        onClick =
-                            {
-                                navController.popBackStack()
-                            },
-                        modifier = Modifier.padding(top = 20.dp)
-                    ) {
-                        Text("Go Back")
+                    Row()
+                    {
+                        Button(
+                            onClick = {
+                                if (isCaptured){
+                                    viewModel.freeCharacter(character!!) {
+                                        viewModel.toggleIsCapturingCharacter()
+                                    }
+                                } else {
+                                    viewModel.captureCharacter(character!!) {
+                                        viewModel.toggleIsCapturingCharacter()
+                                    }
+                                }
+                            }
+                        ) {
+                            if (isCaptured){
+                                Text("Free")
+                            } else {
+                                Text("Capture")
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Button(
+                            onClick =
+                                {
+                                    navController.popBackStack()
+                                },
+                        ) {
+                            Text("Go Back")
+                        }
                     }
+
                 }
             }
         }

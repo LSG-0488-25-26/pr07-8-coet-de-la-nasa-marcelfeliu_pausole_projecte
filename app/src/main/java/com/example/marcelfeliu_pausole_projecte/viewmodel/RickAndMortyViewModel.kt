@@ -47,6 +47,14 @@ class RickAndMortyViewModel : ViewModel() {
     private val _isCapturingCharacter = MutableLiveData<Boolean>(false)
     val isCapturingCharacter: MutableLiveData<Boolean> = _isCapturingCharacter
 
+    // SearchBar
+    private val _searchedText = MutableLiveData("")
+    val searchedText: LiveData<String> = _searchedText
+
+    private val _searchHistory = MutableLiveData<List<String>>(emptyList())
+    val searchHistory: LiveData<List<String>> = _searchHistory
+
+
     //Navigations
     private val _bottomNavigationItems = MutableLiveData<List<BottomNavigationScreens>>(
         listOf(
@@ -143,5 +151,27 @@ class RickAndMortyViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    // funcions searchBar
+    fun onSearchTextChange(text: String) {
+        _searchedText.value = text
+
+        val original = listOfChatacters
+        val filtered = original.filter { it.name.contains(text, ignoreCase = true) }
+
+        _charactersData.value = _charactersData.value?.copy(
+            results = filtered
+        )
+    }
+    fun addToHistory(text: String) {
+        if (text.isNotBlank()) {
+            val currentHistory = _searchHistory.value.orEmpty() // Obté la llista actual o una llista buida
+            this._searchHistory.value = listOf(text) + currentHistory // Afegeix el nou text al principi
+            this._searchedText.value = "" // Neteja el text després de fer la cerca
+        }
+    }
+    fun clearHistory() {
+        this._searchHistory.value = emptyList()
     }
 }

@@ -18,7 +18,7 @@ import androidx.navigation.NavHostController
 @Composable
 fun MyTopAppBar(navController: NavHostController){
     TopAppBar(
-        title = { Text(text = "Superior Bar") },
+        title = { Text(text = "Rick and Morty") },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.LightGray,
             titleContentColor = Color.Black,

@@ -3,6 +3,7 @@ package com.example.marcelfeliu_pausole_projecte.nav
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -41,6 +42,12 @@ fun EntryPoint(navigationController: NavHostController, viewModel: RickAndMortyV
                 }
                 composable(Routes.DetailScreen.route) {
                     DetailScreen(
+                        navigationController,
+                        viewModel
+                    )
+                }
+                composable(Routes.CapturedList.route) {
+                    LazyColumnCharacters(
                         navigationController,
                         viewModel
                     )

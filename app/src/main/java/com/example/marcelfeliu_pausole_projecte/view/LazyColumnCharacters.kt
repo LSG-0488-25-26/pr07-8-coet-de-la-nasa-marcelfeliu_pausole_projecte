@@ -32,7 +32,10 @@ fun LazyColumnCharacters(navController: NavController, viewModel: RickAndMortyVi
     val characterList by viewModel.charactersData.observeAsState(Data(Info(0,"", 0, ""), emptyList()))
 
     LaunchedEffect(Unit) {
-        viewModel.getCharacters()
+        if (characterList.results.isEmpty())
+        {
+            viewModel.getCharacters()
+        }
     }
 
     Column(
@@ -40,7 +43,6 @@ fun LazyColumnCharacters(navController: NavController, viewModel: RickAndMortyVi
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
-            .safeDrawingPadding()
     ) {
         Text(
             text = "Character List",

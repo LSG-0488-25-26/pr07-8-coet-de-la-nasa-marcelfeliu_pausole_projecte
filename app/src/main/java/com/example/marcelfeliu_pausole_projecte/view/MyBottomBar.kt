@@ -25,9 +25,6 @@ fun MyBottomBar(
     NavigationBar(containerColor = Color.LightGray, contentColor = Color.Black) {
         val navBackEntry by navigationController.currentBackStackEntryAsState()
         val currentRoute = navBackEntry?.destination?.route
-        val capturedCharacters by myViewModel.captured.observeAsState()
-
-        Routes.CharactersList.route
 
         bottomNavigationItems.forEach { item ->
             NavigationBarItem(
@@ -35,16 +32,11 @@ fun MyBottomBar(
                 label = { Text(item.label) },
                 selected = currentRoute == item.route,
                 onClick = {
-//                    if (currentRoute != item.route) {
-//                        navigationController.navigate(item.route)
-//                    }
                     when (item.route)
                     {
                         Routes.CharactersList.route -> { myViewModel.getCharacters() }
                         Routes.CapturedList.route -> { myViewModel.getCapturedCharacters() }
                     }
-                    myViewModel.getCaptured()
-                    Log.d("SKDJ", capturedCharacters?.count().toString())
                 }
             )
         }

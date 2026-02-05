@@ -29,14 +29,6 @@ fun MyTopAppBar(navController: NavHostController){
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Enrere")
             }
-        },
-//        actions = {
-//            IconButton(onClick = { navController.navigate(Routes.Search.route) }) {
-//                Icon(imageVector = Icons.Filled.Search, contentDescription = "Buscar")
-//            }
-//            IconButton(onClick = { navController.navigate(Routes.Add.route) }) {
-//                Icon(imageVector = Icons.Filled.Add, contentDescription = "Afegir")
-//            }
-//        }
+        }
     )
 }

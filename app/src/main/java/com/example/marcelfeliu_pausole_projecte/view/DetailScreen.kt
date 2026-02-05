@@ -3,7 +3,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.view.WindowManager
+import android.widget.ScrollView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,7 +60,8 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
 
     Box(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center
 
     ) {
@@ -98,7 +103,7 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
                         }),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .size(380.dp)
+                            .size(320.dp)
 
                     )
 
@@ -129,6 +134,25 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Medium,
                     )
+
+                    Text(
+                        text = "Location: ${character!!.location.name.lowercase().replaceFirstChar { it.uppercase() }}",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium,
+                    )
+
+                    Text(
+                        text = "Origin: ${character!!.origin.name.lowercase().replaceFirstChar { it.uppercase() }}",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium,
+                    )
+
+                    Text(
+                        text = "N of episodes: ${character!!.episode.count()}",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium,
+                    )
+
 
                     Spacer(modifier = Modifier.height(24.dp))
                 } else {
@@ -199,7 +223,7 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
                                 }),
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
-                                .size(200.dp)
+                                .size(160.dp)
 
                         )
 
@@ -270,6 +294,5 @@ fun DetailScreen(navController: NavController, viewModel: RickAndMortyViewModel,
                 }
             }
         }
-
     }
 }

@@ -23,6 +23,8 @@ class RickAndMortyViewModel : ViewModel() {
     private val _currentCharacter = MutableLiveData<Character>()
     var currentCharacter= _currentCharacter
 
+    var listOfChatacters = mutableListOf<Character>()
+
     //API
     private val repository = Repository()
     private val _loading = MutableLiveData(true)
@@ -55,14 +57,13 @@ class RickAndMortyViewModel : ViewModel() {
     public val bottomNavigationItems: LiveData<List<BottomNavigationScreens>> = _bottomNavigationItems
 
     fun getCharacters() {
-        Log.d("jsdhfj", "Hola")
-
         CoroutineScope(Dispatchers.IO).launch {
 
             val response = repository.getAllCharacters()
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     _charactersData.value = response.body()
+                    listOfChatacters = _charactersData.value.results as MutableList<Character>
                     _loading.value = false
                 } else {
                     Log.e("Error :", response.message())
@@ -122,23 +123,24 @@ class RickAndMortyViewModel : ViewModel() {
     }
 
     fun getCapturedCharacters() {
+        Log.d("kdsfsk", "Entering getCapturedCharacters")
         _loading.value = true
 
         CoroutineScope(Dispatchers.IO).launch {
-
-            val response = repository.getAllCharacters()
             val capturedFromDb = dbRepository.getCaptured()
-
             withContext(Dispatchers.Main) {
-                if (response.isSuccessful && response.body() != null) {
-                    val allApiChars = response.body()!!.results
+                if (listOfChatacters.isNotEmpty()) {
+                    Log.d("Edmsd", "entering coroutione of captured")
+                    val allApiChars = listOfChatacters
                     val capturedNames = capturedFromDb.map { it.name }.toSet()
 
                     val filteredList = allApiChars.filter { it.name in capturedNames }
 
                     _charactersData.value.results = filteredList
+                    _loading.value = false
+                    Log.d("Edmsd", "exiting coroutione of captured")
+
                 }
-                _loading.value = false
             }
         }
     }

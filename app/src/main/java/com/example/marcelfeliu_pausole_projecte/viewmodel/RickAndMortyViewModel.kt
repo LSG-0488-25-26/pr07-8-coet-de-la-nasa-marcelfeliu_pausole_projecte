@@ -54,6 +54,9 @@ class RickAndMortyViewModel : ViewModel() {
     private val _searchHistory = MutableLiveData<List<String>>(emptyList())
     val searchHistory: LiveData<List<String>> = _searchHistory
 
+    private val _showSearchBar = MutableLiveData<Boolean>(false)
+    val showSearchBar = _showSearchBar
+
 
     //Navigations
     private val _bottomNavigationItems = MutableLiveData<List<BottomNavigationScreens>>(
@@ -171,5 +174,10 @@ class RickAndMortyViewModel : ViewModel() {
     }
     fun clearHistory() {
         this._searchHistory.value = emptyList()
+    }
+
+    fun toggleSearchBar()
+    {
+        _showSearchBar.value = !_showSearchBar.value
     }
 }

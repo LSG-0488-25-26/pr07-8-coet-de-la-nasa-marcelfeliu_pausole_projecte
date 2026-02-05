@@ -34,6 +34,7 @@ import com.example.marcelfeliu_pausole_projecte.viewmodel.RickAndMortyViewModel
 fun LazyColumnCharacters(navController: NavController, viewModel: RickAndMortyViewModel){
     val showLoading: Boolean by viewModel.loading.observeAsState(true)
     val characterList by viewModel.charactersData.observeAsState(Data(Info(0,"", 0, ""), emptyList()))
+    val showSearchBar by viewModel.showSearchBar.observeAsState(false)
 
     val configuration = LocalConfiguration.current
 
@@ -50,8 +51,10 @@ fun LazyColumnCharacters(navController: NavController, viewModel: RickAndMortyVi
         modifier = Modifier
             .fillMaxSize()
     ) {
-        MySearchBarView(viewModel)
         if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (showSearchBar) {
+                MySearchBarView(viewModel)
+            }
             Text(
                 text = "Character List",
                 fontSize = 28.sp,

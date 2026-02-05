@@ -21,7 +21,7 @@ import com.example.marcelfeliu_pausole_projecte.viewmodel.RickAndMortyViewModel
 fun EntryPoint(navigationController: NavHostController, viewModel: RickAndMortyViewModel)
 {
     Scaffold (
-        topBar = { MyTopAppBar(navigationController) },
+        topBar = { MyTopAppBar(navigationController, viewModel) },
         bottomBar = { MyBottomBar(viewModel, navigationController) }
     )
     { paddingValues ->

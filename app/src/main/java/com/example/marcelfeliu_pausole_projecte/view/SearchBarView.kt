@@ -46,7 +46,7 @@ fun MySearchBarView(viewModel: RickAndMortyViewModel) {
         placeholder = { Text("Search Character") },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(bottom = 8.dp, end = 16.dp, start = 16.dp)
             .clip(RoundedCornerShape(16.dp))
     ) {}
 }

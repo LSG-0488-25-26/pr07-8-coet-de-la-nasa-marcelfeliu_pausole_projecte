@@ -2,6 +2,7 @@ package com.example.marcelfeliu_pausole_projecte.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +30,14 @@ import androidx.navigation.NavController
 import com.example.marcelfeliu_pausole_projecte.model.Data
 import com.example.marcelfeliu_pausole_projecte.model.Info
 import com.example.marcelfeliu_pausole_projecte.viewmodel.RickAndMortyViewModel
-
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import com.example.marcelfeliu_pausole_projecte.R
 @Composable
 fun LazyColumnCharacters(navController: NavController, viewModel: RickAndMortyViewModel){
     val showLoading: Boolean by viewModel.loading.observeAsState(true)
@@ -45,42 +53,61 @@ fun LazyColumnCharacters(navController: NavController, viewModel: RickAndMortyVi
         }
     }
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (showSearchBar) {
-                MySearchBarView(viewModel)
-            }
-            Text(
-                text = "Character List",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        if (showLoading) {
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                CircularProgressIndicator(
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            }
-        } else{
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier
-                    .padding(vertical = 30.dp)
-                    .fillMaxHeight()
-            ) {
-                items(characterList.results){  char ->
-                    RMCharacterItem(char){
-                        viewModel.setCurrentCharacter(char)
-                        navController.navigate("DetailScreen")
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.backgroundimage2),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize(),
+            alpha = 0.9f
+        )
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            if (showLoading) {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            } else{
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    contentPadding = PaddingValues(horizontal = 0.dp, vertical = 0.dp),
+                    modifier = Modifier.fillMaxHeight()
+                ) {
+                    // poso el titol dins de la lazy column per que no sigui estacionari i poguem amagarlo
+                    item {
+                        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            if (showSearchBar) {
+                                MySearchBarView(viewModel)
+                            }
+                            Text(
+                                text = "Character List",
+                                fontSize = 32.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color(0xFF00FF9C),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 12.dp)
+                            )
+                        }
+                    }
+                    // carreguem les cards reals
+                    items(characterList.results) { char ->
+                        RMCharacterItem(char) {
+                            viewModel.setCurrentCharacter(char)
+                            navController.navigate("DetailScreen")
+                        }
                     }
                 }
             }
